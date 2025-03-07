@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { decodeJwt } from 'jose';
 
+export const dynamic = 'force-dynamic';
+
 export const GET = async () => {
     const cookieStore = cookies();
     const accessToken = cookieStore.get('accessToken')?.value || '';

@@ -7,7 +7,7 @@ import xior from 'xior';
 import { decodeToken } from './lib/utils';
 
 const AUTH_ROUTE = ['/auth/login', '/auth/register'];
-const PRIVATE_ROUTE = ['/profile', '/'];
+const PRIVATE_ROUTE = ['/profile', '/', '/me'];
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -71,7 +71,7 @@ const refreshTokenMiddleware = async (request: NextRequest) => {
             refreshToken,
         });
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } = data;
-        console.log('>>> Middleware Refresh token thành công', data);
+        console.log('>>> Middleware Refresh token thành công');
         const payload = {
             access: decodeToken(newAccessToken) as JWTPayload,
             refresh: decodeToken(newRefreshToken) as JWTPayload,
@@ -79,7 +79,10 @@ const refreshTokenMiddleware = async (request: NextRequest) => {
         const expAt = payload.access.exp as number;
         const expRt = payload.refresh.exp as number;
 
-        console.log('>>> Middleware kiểm tra refresh token cũ và mới', refreshToken === newRefreshToken);
+        console.log(
+            '>>> Middleware kiểm tra refresh token cũ và mới: ',
+            refreshToken === newRefreshToken ? 'NO' : 'OK'
+        );
 
         const response = NextResponse.next();
         response.cookies.set('accessToken', newAccessToken, {

@@ -159,6 +159,10 @@ app.get('/api/protected', authenticateToken, (req, res) => {
     });
 });
 
+app.put('/api/user', authenticateToken, async (req, res) => {
+    res.status(200).json({ success: true });
+});
+
 // Khởi động server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
