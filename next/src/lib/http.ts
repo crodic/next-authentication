@@ -37,14 +37,7 @@ httpClient.interceptors.response.use(
             return refreshTokenPromise.then(() => {
                 originalRequest.headers.Authorization = httpClient.defaults.headers.Authorization;
                 console.log('>>> Xior gọi lại request', originalRequest);
-                return httpClient
-                    .request(originalRequest)
-                    .then(() => {
-                        console.log('>>> Xior gọi lại request thành công');
-                    })
-                    .catch(() => {
-                        console.log('>>> Xior gọi lại request bi loi');
-                    });
+                return httpClient.request(originalRequest);
             });
         }
         return Promise.reject(error);
