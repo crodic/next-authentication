@@ -11,11 +11,8 @@ app.use(cors({ origin: 'http://localhost:3000', credentials: true, methods: ['GE
 const ACCESS_TOKEN_SECRET = 'access_token_secret_key';
 const REFRESH_TOKEN_SECRET = 'refresh_token_secret_key';
 
-// Thời gian hết hạn
-const ACCESS_TOKEN_EXPIRY = '2m'; // 2 phút
-const REFRESH_TOKEN_EXPIRY = '7d'; // 7 ngày
-
-// Fake user database
+const ACCESS_TOKEN_EXPIRY = '2m';
+const REFRESH_TOKEN_EXPIRY = '7d';
 const users = [
     {
         id: 1,
@@ -29,10 +26,8 @@ const users = [
     },
 ];
 
-// Lưu trữ refresh tokens (trong thực tế nên lưu vào database)
 let refreshTokens = [];
 
-// Middleware xác thực token
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -50,7 +45,6 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Route đăng nhập
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -82,7 +76,6 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Route lấy refresh token
 app.post('/api/refresh-token', (req, res) => {
     const { refreshToken } = req.body;
 
@@ -120,7 +113,6 @@ app.post('/api/refresh-token', (req, res) => {
     });
 });
 
-// Route đăng xuất
 app.post('/api/logout', (req, res) => {
     const { refreshToken } = req.body;
 
@@ -130,7 +122,6 @@ app.post('/api/logout', (req, res) => {
     res.status(200).json({ message: 'Đăng xuất thành công' });
 });
 
-// Route lấy thông tin người dùng thông qua accessToken
 app.get('/api/user', authenticateToken, (req, res) => {
     // Lấy thông tin từ JWT payload (đã được giải mã trong middleware)
     const { id, username } = req.user;
@@ -151,7 +142,6 @@ app.get('/api/user', authenticateToken, (req, res) => {
     });
 });
 
-// Route bảo vệ để kiểm tra authentication
 app.get('/api/protected', authenticateToken, (req, res) => {
     res.json({
         message: 'Đây là route được bảo vệ',
@@ -163,7 +153,6 @@ app.put('/api/user', authenticateToken, async (req, res) => {
     res.status(200).json({ success: true });
 });
 
-// Khởi động server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server đang chạy trên cổng ${PORT}`);

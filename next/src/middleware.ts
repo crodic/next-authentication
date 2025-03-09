@@ -98,7 +98,6 @@ const refreshTokenMiddleware = async (request: NextRequest) => {
 
         return response;
     } catch (_error: any) {
-        console.log('>>> Refresh token lỗi:', _error);
         const errorResponse = NextResponse.redirect(new URL('/auth/login', request.url));
         errorResponse.cookies.delete('accessToken');
         errorResponse.cookies.delete('refreshToken');
